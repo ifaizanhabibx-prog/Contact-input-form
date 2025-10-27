@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Form Validation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    form {
+      background-color: white;
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: none;
+      height: 100px;
+    }
+
+    input, textarea {
+      border: 2px solid #ccc;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    input:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 8px rgba(0, 123, 255, 0.3s);
+    }
+    .error {
+      color: red;
+      font-size: 0.9em;
+    }
+
+    input.error-border,
+    textarea.error-border {
+      border: 2px solid red;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+    .success {
+      color: green;
+    }
+    @media (max-width: 600px) {
+      input,textarea {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <form id="contactForm">
+    <h2>Contact Us</h2>
+
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" placeholder="Enter your name">
+    <span id="nameError" class="error"></span>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" placeholder="Enter your email">
+    <span id="emailError" class="error"></span>
+
+    <label for="message">Message</label>
+    <textarea id="message" name="message" placeholder="Write your message..."></textarea>
+    <span id="messageError" class="error"></span>
+
+    <button type="submit">Submit</button>
+
+    <p id="formMessage" class="success"></p>
+
+  </form>
+
+  <script>
+    document.getElementById("contactForm").addEventListener("submit", function (e) {
+      event.preventDefault(); // Stop form from reloading the page
+      consol.log("Form submission prevented!")
+      //You can now validate or send data with Javascript
+
+      // Get field values
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+
+      fetch("http://your-server.com/submit-form", {
+        method: "POST", // 🔹 Use HTTPmethod to send data
+        headers: { "content-type": "application/json" }, // 🔹 Tell the server you're sending json
+        body: JSON.stringify(formData) // 🔹 convert JS object to json text
+      })
+        .then(response => response.json())
+        .then(data => {
+          alert("Message sent successfully!");
+          this.reset(); // CLear the form fields
+        })
+        .catch(error => {
+          consol("Error:", error);
+          alert("somethings went wrong!");
+        });
+
+
+      // Simple email format check
+      const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      const emailError = document.getElementById("emailerror");
+
+      if (!emailPattern test(this.value.trim())) {
+      emailError.textContent = "Invalid email format";
+    } else {
+      emailError.textContent = "";
+    }
+
+    document.getElementById("formMessage").textContent = "Form submitted successfully!";
+    document.getElementById("formMessage").textContent = "success" // or "error"
+
+    if (!name) {
+      document.getElementById("nameError").textContent = "Name is required.";
+      document.getElementById("name").classList.add("error-border");
+      valid = false;
+    }
+
+    if (!email) {
+      document.getElementById("emailError").textContent = "Email is required.";
+      document.getElementById("email").classList.add("error-border");
+      valid = false
+    } else if (!emailPattern.test(email)) {
+      document.getElementById("emailError").textContent = "Invalid email is format.";
+      document.getElementById("email").classList.add("error-border");
+    }
+
+    if (!message) {
+      document.getElementById("messageError").textContent = "Message cannot be empty."
+      document.getElementById("message").classList.add("error-border");
+      valid = false;
+    }
+
+    if (valid) {
+      alert("Form submitted successfully!");
+      this.reset();
+    }
+
+    // Validation
+    if (!name || !email || !message) {
+      alert("Please fill out all fields.");
+    } else if (!emailPattern.test(email)) {
+      alert("Please enter a valid email address.");
+    } else {
+      alert("Form submitted successfully!");
+      document.getElementById("contactForm").reset(); // Clear form
+    }
+
+
+    });
+
+  </script>
+</body>
+
+</html>
